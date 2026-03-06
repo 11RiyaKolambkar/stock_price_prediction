@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Stock Price Prediction{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center bg-dark text-light">
+    <h1 class="display-4 text-danger">Welcome to the Stock Price Prediction System</h1>
+    <p class="lead">Accurately predict the future stock prices of Microsoft using our advanced prediction model.</p>
+    <a class="btn btn-danger btn-lg" href="{% url 'predict' %}" role="button">Make a Prediction</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4 bg-dark text-light">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Why Use Our System?</h5>
+                    <p class="card-text">Our system leverages advanced machine learning models to provide accurate predictions of Microsoft's stock prices, helping you make informed investment decisions. With real-time data analysis and predictive analytics, you can stay ahead of the market trends and maximize your returns.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4 bg-dark text-light">
+                <div class="card-body">
+                    <h5 class="card-title text-success">How It Works</h5>
+                    <p class="card-text">Input the opening, high, low prices, and volume of the stock, and our model will predict the closing price. Our system is trained on historical data to ensure high accuracy. We use a linear regression model that adjusts based on new data, ensuring that our predictions are always up-to-date and reliable.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4 bg-dark text-light">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Features</h5>
+                    <p class="card-text">Our platform offers a range of features including:</p>
+                    <ul>
+                        <li>Real-time stock price predictions</li>
+                        <li>Historical data analysis</li>
+                        <li>User-friendly interface</li>
+                        <li>Secure and reliable predictions</li>
+                        <li>Comprehensive prediction history</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4 bg-dark text-light">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Get Started</h5>
+                    <p class="card-text">To start using our system, simply register an account and log in. Once logged in, you can input the required stock details and get instant predictions. Track your prediction history and make informed decisions based on our accurate predictions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-light">Recent Predictions</h2>
+    <div id="plotly-graph"></div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    var dates = {{ dates|safe }};
+    var predicted_prices = {{ predicted_prices|safe }};
+    
+    var trace1 = {
+        type: "scatter",
+        mode: "lines",
+        name: 'Predicted Prices',
+        x: dates,
+        y: predicted_prices,
+        line: {color: '#FF4136'}
+    };
+
+    var data = [trace1];
+      
+    var layout = {
+        title: 'Recent Stock Price Predictions',
+        xaxis: {
+            title: 'Date',
+            color: 'white'
+        },
+        yaxis: {
+            title: 'Predicted Price',
+            color: 'white'
+        },
+        paper_bgcolor: '#1a1a1a',
+        plot_bgcolor: '#1a1a1a',
+        font: {
+            color: 'white'
+        }
+    };
+      
+    Plotly.newPlot('plotly-graph', data, layout);
+</script>
+{% endblock %}

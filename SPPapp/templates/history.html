@@ -1,0 +1,30 @@
+<!-- history.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Prediction History{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Prediction History</h1>
+    <div>
+        <h2>Historical Predictions</h2>
+        {% if predictions %}
+        <ul class="list-group">
+            {% for prediction in predictions %}
+            <li class="list-group-item">
+                <p><strong>Date:</strong> {{ prediction.date }}</p>
+                <p><strong>Open Price:</strong> {{ prediction.open_price }}</p>
+                <p><strong>High Price:</strong> {{ prediction.high_price }}</p>
+                <p><strong>Low Price:</strong> {{ prediction.low_price }}</p>
+                <p><strong>Volume:</strong> {{ prediction.volume }}</p>
+                <p><strong>Predicted Price:</strong> {{ prediction.predicted_price }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No predictions available.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

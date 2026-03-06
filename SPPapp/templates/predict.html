@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Predict Stock Price{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-danger">Predict Stock Price</h1>
+    <p class="lead text-light">This is a Microsoft stock price prediction app. Enter the details to predict the stock closing price.</p>
+    {% if user.is_authenticated %}
+        <form method="post" class="bg-dark p-4 rounded">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_open_price" class="text-success">Open Price:</label>
+                <p class="text-muted">The price at which the stock opens in the market.</p>
+                {{ form.open_price }}
+            </div>
+            <div class="form-group">
+                <label for="id_high_price" class="text-success">High Price:</label>
+                <p class="text-muted">The highest price at which the stock traded during the day.</p>
+                {{ form.high_price }}
+            </div>
+            <div class="form-group">
+                <label for="id_low_price" class="text-success">Low Price:</label>
+                <p class="text-muted">The lowest price at which the stock traded during the day.</p>
+                {{ form.low_price }}
+            </div>
+            <div class="form-group">
+                <label for="id_volume" class="text-success">Volume:</label>
+                <p class="text-muted">The total number of shares traded during the day.</p>
+                {{ form.volume }}
+            </div>
+            <button type="submit" class="btn btn-danger btn-lg">Predict</button>
+        </form>
+        <h2 class="text-light mt-5">Prediction History Plot</h2>
+        <div id="plotly-graph"></div>
+    {% else %}
+        <p class="text-light">Please <a href="{% url 'login' %}" class="text-danger">log in</a> to make predictions.</p>
+    {% endif %}
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    var dates = {{ dates|safe }};
+    var predicted_prices = {{ predicted_prices|safe }};
+    
+    var trace1 = {
+        type: "scatter",
+        mode: "lines",
+        name: 'Predicted Prices',
+        x: dates,
+        y: predicted_prices,
+        line: {color: '#FF4136'}
+    };
+
+    var data = [trace1];
+      
+    var layout = {
+        title: 'Prediction History',
+        xaxis: {
+            title: 'Date',
+            color: 'white'
+        },
+        yaxis: {
+            title: 'Predicted Price',
+            color: 'white'
+        },
+        paper_bgcolor: '#1a1a1a',
+        plot_bgcolor: '#1a1a1a',
+        font: {
+            color: 'white'
+        }
+    };
+      
+    Plotly.newPlot('plotly-graph', data, layout);
+</script>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Prediction Result{% endblock %}
+
+{% block content %}
+<h1>Prediction Result</h1>
+<p>Predicted Closing Price: {{ prediction }}</p>
+
+<h2>Past Predictions</h2>
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Open Price</th>
+            <th>High Price</th>
+            <th>Low Price</th>
+            <th>Volume</th>
+            <th>Predicted Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pred in old_predictions %}
+        <tr>
+            <td>{{ pred.date }}</td>
+            <td>{{ pred.open_price }}</td>
+            <td>{{ pred.high_price }}</td>
+            <td>{{ pred.low_price }}</td>
+            <td>{{ pred.volume }}</td>
+            <td>{{ pred.predicted_price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Prediction History Plot</h2>
+<div id="plotly-graph"></div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    var dates = {{ dates|safe }};
+    var predicted_prices = {{ predicted_prices|safe }};
+    
+    var trace1 = {
+        type: "scatter",
+        mode: "lines",
+        name: 'Predicted Prices',
+        x: dates,
+        y: predicted_prices,
+        line: {color: '#FF4136'}
+    };
+
+    var data = [trace1];
+      
+    var layout = {
+        title: 'Stock Price Prediction History',
+        xaxis: {
+            title: 'Date',
+            color: 'white'
+        },
+        yaxis: {
+            title: 'Predicted Price',
+            color: 'white'
+        },
+        paper_bgcolor: '#1a1a1a',
+        plot_bgcolor: '#1a1a1a',
+        font: {
+            color: 'white'
+        }
+    };
+      
+    Plotly.newPlot('plotly-graph', data, layout);
+</script>
+{% endblock %}
